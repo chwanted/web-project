@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <h1>dsfdsa adsf a</h1>
+  <!-- <div> -->
     <div class="header wrap" :class="{fixed: isFixed}" :style="{'background-color':!isColor?'rgba(255,255,255,0)':''}">
         <div class="header-container inner">
             <div @click="$utils.toPage('/')" style="cursor: pointer">
@@ -27,7 +26,7 @@
             </div>
         </div>
     </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -47,7 +46,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
- .header {
+.header {
     width: 100%;
     height: 70px !important;
 
@@ -89,5 +88,4 @@ export default {
         }
     }
 }
-
 </style>
