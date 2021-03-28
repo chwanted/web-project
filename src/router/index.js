@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import index from '../page/index'
 
 Vue.use(Router)
 
@@ -7,8 +8,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Index',
-      component: () => import('@page/index'),
+      name: 'index',
+      components:  () => import('../page/index'),
       meta: { 
         name: '首页'
        }
@@ -16,7 +17,7 @@ export default new Router({
     {
       path: '/searchDetail',
       name: 'searchDetail',
-      component: () => import('@page/searchDetail'),
+      component: () => import('../page/searchDetail'),
       meta: { 
         name: '搜索结果'
        }
@@ -24,7 +25,7 @@ export default new Router({
     {
       path: '/download',
       name: 'download',
-      component: () => import('@page/download'),
+      component: () => import('../page/download'),
       meta: { 
         name: '下载中心'
        }
@@ -32,7 +33,7 @@ export default new Router({
     {
       path: '/detail',
       name: 'detail',
-      component: () => import('@page/detail'),
+      component: () => import('../page/detail'),
       meta: { 
         name: '古诗词详情'
        }
