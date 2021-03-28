@@ -2,12 +2,6 @@ import axios from 'axios'
 import store from 'store'
 import router from '../router'
 import { Notification, Message } from 'element-ui'
-import AnalysysAgent from '../assets/js/AnalysysAgent_JS_SDK.es6.min.js'
-AnalysysAgent.init({
-//   appkey: 'a7a902f160cbbc5a',//APPKEY
-//   uploadURL: 'http://172.16.100.47:8089',//上传数据的地址
-//   SDKFileDirectory: '/*设置为可视化与热图模块SDK实际存放目录*/'//可视化与热图模块SDK存放目录。
-})
 
 // 提示函数
 const tip = mes => {

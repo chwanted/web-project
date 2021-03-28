@@ -1,4 +1,5 @@
 import { Message } from 'element-ui'
+import Router from '../router'
 
 const utils = {
   // 错误提示
@@ -11,6 +12,10 @@ const utils = {
   // 拷贝对象
   parseJSON (json) {
     return JSON.parse(JSON.stringify(json))
+  },
+  // 跳转指定页
+  toPage(url){
+    if (url) Router.push(url)
   }
 }
 export default utils
