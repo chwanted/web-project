@@ -1,5 +1,5 @@
 <template>
-  <!-- <div> -->
+  <div>
     <div class="header wrap" :class="{fixed: isFixed}" :style="{'background-color':!isColor?'rgba(255,255,255,0)':''}">
         <div class="header-container inner">
             <div @click="$utils.toPage('/')" style="cursor: pointer">
@@ -8,7 +8,7 @@
             <div class="header-right">
                 <div class="download-center">
                     <i></i>
-                </div>-dev
+                </div>
                 <div class="login-box flex-row">
                     <div v-if="hasLogin" class="flex-row">
                         <img class="avatar" :src="defaultUserImg" />
@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-  <!-- </div> -->
+  </div>
 </template>
 
 <script>
@@ -39,7 +39,7 @@ export default {
     },
     data(){
         return{
-            isFixed: false
+            isFixed: true
         }
     }
 }

@@ -1,18 +1,16 @@
 <template>
   <div>
-    <Myheader></Myheader>
+    <div class="test">gfjhghj</div>
   </div>
 </template>
 
-<script >
-import Myheader from '../components/header'
+<script>
 export default {
-  components: { 
-    Myheader
-  },
 }
 </script>
 
 <style>
-
+.test{
+  margin-top: 100px;
+}
 </style>

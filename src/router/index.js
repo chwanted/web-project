@@ -7,8 +7,12 @@ export default new Router({
   routes: [
     {
       path: '/',
+      redirect: '/index'
+    },
+    {
+      path: '/index',
       name: 'index',
-      components: () => import('../page/index'),
+      component: () => import('../page/index'),
       meta: { 
         name: '首页'
        }
