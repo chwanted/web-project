@@ -15,6 +15,35 @@
           </div>
         </div>
       </header>
+      <section>
+        <div class="inner content-center">
+          <div class="left">
+            <div class="authorList" style="width: 100%; position: relative;">
+              <ul class="flex-row author-info">
+                <li v-for="(item, index) in authorList" :key="index" class="info-list" @click="toSearch">
+                  <div class="author-message">
+                    <img :src="authorAvatar" class="authorAvatar"/>
+                    <div class="authorIntro">
+                      <h3>{{authorList.authorName}}</h3>
+                      <span>{{authorList.intro}}</span>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="right">
+            <div class="right-box" :class="searchBarFixed == true ? 'isFixed':''">
+              <div class="right-info">
+                <h2>诗词排行榜</h2>
+                <ul class="rankList">
+                  <li v-for="(item, index) in rankingList" :key="index" @click="toDetail(item)">{{rankingList.name}}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </template>
@@ -23,13 +52,37 @@
 export default {
   data() {
     return{
+      searchBarFixed:false,
       searchContent: '',
-      authorList: []
+      authorList: [
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"}
+      ],
+      rankingList:[
+        { name: "《蜀道难》"},
+				{ name: '《桃花源记》'},
+        { name: '《桃花源记》'},
+        { name: '《桃花源记》'},
+        { name: '《桃花源记》'},
+        { name: '《桃花源记》'},
+        { name: '《桃花源记》'},
+        { name: '《桃花源记》'},
+        { name: '《桃花源记》'},
+        { name: '《桃花源记》'}
+      ]
     }
   },
   methods: {
     toSearch(){
-      
+    },
+    toDetail(item){
+
     }
   }
 }
@@ -46,13 +99,13 @@ header {
   margin-top: 70px;
   width: 100%;
   background: url(../assets/img/banner.png) no-repeat center;
-  min-height: 400px;
+  min-height: 425px;
   min-width: 870px;
   background-size: 100% 100%;
 }
     
 .inner {
-  height: 400px;
+  height: 425px;
   display: flex;
   align-items: center;
 }
@@ -79,5 +132,79 @@ p {
   font-size: 22px;
   color: #ffffff;
   cursor: pointer;
+}
+
+section{
+  width: 100%;
+  margin: 0 auto;
+  padding: 26px 0;
+
+  .content-center{
+    display: flex;
+    flex-wrap: wrap;
+
+    .left{
+      width: 880px;
+      margin-right: 20px;
+
+      .authorList{
+        width: 100%;
+
+        .info-list{
+          width: 280px;
+          margin-top: 16px;
+          background: #ffffff;
+          margin-right: 20px;
+          cursor: pointer;
+          position: relative;
+          transition: all 0.2s ease;
+          &:hover{
+            box-shadow: 0px 4px 16px 0px rgba(28, 60, 154, 0.3);
+            -webkit-transform:translate3d(-2px,-4px,0);
+            -moz-transform:translate3d(-2px,-4px,0);
+            transform:translate3d(-2px,-4px,0);
+      }
+        }
+      }
+    }
+    .right{
+      width: 300px;
+      height: 100%;
+
+      .right-info{
+        background-color: #fff;
+
+        h2{
+          font-family: MicrosoftYaHei;
+          font-size: 18px;
+          letter-spacing: 1px;
+          color: #343539;
+          border-bottom: 1px solid #dbdcdf;
+          padding: 0 18px;
+          line-height: 40px;
+          display: flex;
+          font-weight: normal;
+        }
+        .rankList{
+          width: 100%;
+          background-color: #ffffff;
+          
+          li{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            height: 48px;
+            cursor: pointer;
+            font-family: MicrosoftYaHeiLight;
+            font-size: 16px;
+            font-weight: normal;
+            font-stretch: normal;
+            letter-spacing: 1px;
+            color: #58595d;
+          }
+        }
+      }
+    }
+  }
 }
 </style>

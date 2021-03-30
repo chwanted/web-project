@@ -3,18 +3,18 @@
     <div class="header wrap" :class="{fixed: isFixed}" :style="{'background-color':!isColor?'rgba(255,255,255,0)':''}">
         <div class="header-container inner">
             <div @click="$utils.toPage('/')" style="cursor: pointer">
-                <div :style="{'color':!isColor?'rgba(255,255,255,0)':''}">古诗文鉴赏</div>
+                <div :style="{'color':!isColor?'rgba(255,255,255,0)':''}" class="title">古诗文鉴赏</div>
             </div>
             <div class="header-right">
                 <div class="login-box flex-row">
                     <div v-if="hasLogin" class="flex-row">
                         <div class="download-center">
-                            <i></i>
+                            <img class="download" :src=downloadImg style="width: 29px;cursor: pointer"/>
                         </div>
-                        <img class="avatar" :src="defaultUserImg" />
+                        <img class="avatar" :src=userImg style="width: 29px;"/>
                         <el-dropdown @command="logout">
                             <span class="el-dropdown-link" :class="{white: !isColor}">
-                            {{ username }}<i class="el-icon-caret-bottom el-icon--right"></i>
+                            {{ username }}
                             </span>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item>退出登录</el-dropdown-item>
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import downloadImg from '../assets/img/download.png'
+import userImg from '../assets/img/avatar.png'
 export default {
     props: {
         isColor: {
@@ -42,10 +44,12 @@ export default {
     },
     data(){
         return{
+            downloadImg: downloadImg,
+            userImg: userImg,
+            username:'小明',
             noLogin: true,
             isFixed: true,
             dialogVisible: false,
-            defaultUserImg: '../assets/img/defaultUserImg.png',
             hasLogin: localStorage.getItem('hasLogin') || false,
             form: {
                 username: '',
@@ -78,6 +82,11 @@ export default {
 .header {
     width: 100%;
     height: 70px !important;
+}
+
+.title{
+    font-size: 26px;
+    font-family: Microsoft YaHei, Microsoft YaHei-Normal;
 }
 
 .fixed {
