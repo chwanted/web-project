@@ -19,13 +19,12 @@
         <div class="inner content-center">
           <div class="left">
             <div class="authorList" style="width: 100%; position: relative;">
-              <ul class="flex-row author-info">
+              <ul class="author-info">
                 <li v-for="(item, index) in authorList" :key="index" class="info-list" @click="toSearch">
                   <div class="author-message">
-                    <img :src="authorAvatar" class="authorAvatar"/>
-                    <div class="authorIntro">
-                      <h3>{{authorList.authorName}}</h3>
-                      <span>{{authorList.intro}}</span>
+                    <div class="authorAvatar" :style="'background: url('+authorAvatar+') no-repeat center;'">
+                      <h3>{{item.authorName}}</h3>
+                      <span>{{item.intro}}</span>
                     </div>
                   </div>
                 </li>
@@ -37,7 +36,7 @@
               <div class="right-info">
                 <h2>诗词排行榜</h2>
                 <ul class="rankList">
-                  <li v-for="(item, index) in rankingList" :key="index" @click="toDetail(item)">{{rankingList.name}}</li>
+                  <li v-for="(item, index) in rankingList" :key="index" @click="toDetail(item)">{{item.name}}</li>
                 </ul>
               </div>
             </div>
@@ -49,12 +48,15 @@
 </template>
 
 <script>
+import authorAvatar from '../assets/img/libai.jpg'
 export default {
   data() {
     return{
       searchBarFixed:false,
       searchContent: '',
+      authorAvatar: authorAvatar,
       authorList: [
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
         {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
         {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
         {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
@@ -141,35 +143,62 @@ section{
 
   .content-center{
     display: flex;
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
+    justify-content: center;
 
     .left{
-      width: 880px;
+      width: 620px;
       margin-right: 20px;
+      margin-top: auto;
 
       .authorList{
         width: 100%;
+        padding: 20px 10px;
+        display: inline-block;
 
-        .info-list{
-          width: 280px;
-          margin-top: 16px;
-          background: #ffffff;
-          margin-right: 20px;
-          cursor: pointer;
-          position: relative;
-          transition: all 0.2s ease;
-          &:hover{
-            box-shadow: 0px 4px 16px 0px rgba(28, 60, 154, 0.3);
-            -webkit-transform:translate3d(-2px,-4px,0);
-            -moz-transform:translate3d(-2px,-4px,0);
-            transform:translate3d(-2px,-4px,0);
-      }
+        .author-info{
+          overflow: hidden;
+          width: 600px;
+          margin-bottom: -30px;
+          margin-top: 0;
+          background: none;
+
+          li{
+            list-style: none;
+            float: left;
+            width: 198px;
+            height: 198px;
+            margin-bottom: 10px;
+            cursor:pointer;
+
+            .author-message{
+              margin: 0 10px;
+              height: 178px;
+
+              .authorAvatar{
+                width: 100%;
+                height: 100%;
+                background-size: 100% 100% !important;
+                padding: 80px 10px 0px 10px;
+                font-size: 13px;
+              }
+
+              &:hover{
+              box-shadow: 0px 4px 16px 0px rgba(28, 60, 154, 0.3);
+              -webkit-transform:translate3d(-2px,-4px,0);
+              -moz-transform:translate3d(-2px,-4px,0);
+              transform:translate3d(-2px,-4px,0);
+              }
+              
+            }
+          }
         }
       }
     }
     .right{
       width: 300px;
       height: 100%;
+      padding: 20px 0px;
 
       .right-info{
         background-color: #fff;
@@ -188,6 +217,7 @@ section{
         .rankList{
           width: 100%;
           background-color: #ffffff;
+          text-align: center;
           
           li{
             width: 100%;
@@ -201,6 +231,11 @@ section{
             font-stretch: normal;
             letter-spacing: 1px;
             color: #58595d;
+            padding: 0 20px;
+
+            &:hover{
+              box-shadow: 0px 4px 16px 0px rgba(28, 60, 154, 0.1);
+            }
           }
         }
       }
