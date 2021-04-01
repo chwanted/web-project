@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Myheader></Myheader>
     <div class="wrap">
       <header>
         <div class="inner">
@@ -22,7 +23,7 @@
               <ul class="author-info">
                 <li v-for="(item, index) in authorList" :key="index" class="info-list" @click="toSearch">
                   <div class="author-message">
-                    <div class="authorAvatar" :style="'background: url('+authorAvatar+') no-repeat center;'">
+                    <div class="authorAvatar" :style="'background-image: -webkit-cross-fade(url('+authorAvatar+'), url('+hoverImg+'), 75%);'">
                       <h3>{{item.authorName}}</h3>
                       <span>{{item.intro}}</span>
                     </div>
@@ -48,23 +49,29 @@
 </template>
 
 <script>
+import header from '../components/header'
 import authorAvatar from '../assets/img/libai.jpg'
+import hoverImg from '../assets/img/hover.png'
 export default {
+  components:{
+    Myheader: header,
+  },
   data() {
     return{
       searchBarFixed:false,
       searchContent: '',
       authorAvatar: authorAvatar,
+      hoverImg: hoverImg, 
       authorList: [
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”……"}
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
+        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"}
       ],
       rankingList:[
         { name: "《蜀道难》"},
@@ -179,17 +186,38 @@ section{
                 width: 100%;
                 height: 100%;
                 background-size: 100% 100% !important;
-                padding: 80px 10px 0px 10px;
+                padding: 0px 4px;
                 font-size: 13px;
+                display: flex;
+                flex-direction:column;
+                justify-content: flex-end;
+                font-family: Microsoft YaHei, Microsoft YaHei-Normal;
+
+                h3{
+                  text-align: right;
+                  margin-bottom: 4px;
+                  color: rgb(255, 255, 255);
+                  letter-spacing: 5px;
+                }
+                
+                span{
+                  display: -webkit-box; 
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 3;
+                  overflow: hidden;
+                  margin-bottom: 4px;
+                  letter-spacing: 1px;
+                  text-indent:2em;
+                  color: rgb(255, 255, 255);
+                }
               }
 
               &:hover{
-              box-shadow: 0px 4px 16px 0px rgba(28, 60, 154, 0.3);
-              -webkit-transform:translate3d(-2px,-4px,0);
-              -moz-transform:translate3d(-2px,-4px,0);
-              transform:translate3d(-2px,-4px,0);
+                box-shadow: 0px 4px 16px 0px rgba(28, 60, 154, 0.3);
+                -webkit-transform:translate3d(-2px,-4px,0);
+                -moz-transform:translate3d(-2px,-4px,0);
+                transform:translate3d(-2px,-4px,0);
               }
-              
             }
           }
         }
@@ -234,7 +262,7 @@ section{
             padding: 0 20px;
 
             &:hover{
-              box-shadow: 0px 4px 16px 0px rgba(28, 60, 154, 0.1);
+              background-color: rgba(56,103,242,.08);
             }
           }
         }
