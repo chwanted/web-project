@@ -12,7 +12,7 @@
                 <span class="author">李白</span>
                 <p class="info">独发到</p>
               </div>
-              <div class="download-btn">
+              <div class="download-btn" style="margin-right: 50px;">
                 <el-button type="primary" icon="el-icon-download" size="mini" circle></el-button>
               </div>
             </div>
@@ -48,9 +48,9 @@
                 <li v-for="item in msg" :key="item.id">
                   <div class="comment-info flex">
                     <img :src="avatar" style="width: 42px;height: 42px">
-                    <div>
-                      <span>{{ item.name }}</span>
-                      <p>{{ item.text }}</p>
+                    <div class="inner user-comment">
+                      <span class="user-name">{{ item.name }}</span>
+                      <p class="user-comment">{{ item.text }}</p>
                     </div>
                   </div>
                   <span class="publishing-time">{{ item.time }}发表</span>
@@ -167,11 +167,22 @@ margin: 20px 20px 0 0;
           box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.15);
           display: flex;
           justify-content: space-between;
+          padding: 20px 0;
 
           .tag{
-            border: ;
+            width: 42px;
+            height: 25px;
+            border: 1px solid #ff8282;
+            border-radius: 19px;
+            color: #ff8282;
+            font-size: 13px;
+            font-family: Microsoft YaHei, Microsoft YaHei-Normal;
+            line-height: 25px;
+            text-align:center;
+            margin-left: 50px;
           }
           .poem-info{
+            text-align:center;
             h3{
               color:#333333;
             }
@@ -224,15 +235,17 @@ margin: 20px 20px 0 0;
                 justify-items: center;
                 padding: 20px 0;
 
-                div {
-                  padding: 0 20px;
-                  span{
+                .user-comment {
+                  .user-name{
                     color: #66b1ff;
                     font-size: 14px;
+                    display:block;
                   }
-                  p{
+                  .user-comment{
                     color: #323232;
                     font-size: 13px;
+                    padding: 0 0 0 30px;
+                    text-indent: 0 !important;
                   }
                 }
               }
