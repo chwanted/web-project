@@ -95,82 +95,83 @@ export default {
 
 <style lang="scss" scoped>
 .header {
-    width: 100%;
-    height: 70px !important;
+  width: 100%;
+  height: 70px !important;
+  display: flex;
+  justify-content: center;
+
+  &.fixed {
+    background-color: #fff !important;
+    box-shadow: 0 1px 5px #eee;
+    transform: translateY(100%);
+    transition: all .3s ease;
+    position: fixed;
+    top: -70px;
+    left: 0;
+    z-index: 99;
+
+    .header-right-menu li,
+    .el-dropdown-link.white,
+    .el-dropdown-link.white .el-icon-caret-bottom{
+      color: #343539 !important;
+    }
+  }
+
+  .header-container {
+    position: relative;
+    height: 70px;
     display: flex;
-    justify-content: center;
+    align-items: center;
+    width: 1200px;
+    margin: 0 auto;
+    .title {
+      font-size: 26px;
+      font-family: Microsoft YaHei, Microsoft YaHei-Normal;
+      letter-spacing: 5px;
+    }
 
-    &.fixed {
-      background-color: #fff !important;
-      box-shadow: 0 1px 5px #eee;
-      transform: translateY(100%);
-      transition: all .3s ease;
-      position: fixed;
-      top: -70px;
-      left: 0;
-      z-index: 99;
+    .header-right {
+      position: absolute;
+      right: 0;
+      display: flex;
+      align-items: center;
+      height: 70px;
 
-      .header-right-menu li,
-      .el-dropdown-link.white,
-      .el-dropdown-link.white .el-icon-caret-bottom{
-        color: #343539 !important;
+      .login-box {
+        width: 220px;
+        justify-content: flex-end;
+        position: relative;
+
+        .header-image {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          overflow: hidden;
+        }
+
+        .header-right-btn {
+          width: 100px;
+          height: 30px;
+          line-height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: none;
+          outline: none;
+          background-color: #3867f2;
+          color: #fff;
+          font-size: 16px;
+          cursor: pointer;
+
+          span {
+            position: relative;
+            color: #fff;
+            font-size: 16px;
+          }
+        }
       }
     }
-
-    .header-container {
-        position: relative;
-        height: 70px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 60%;
-        
-        .title{
-            font-size: 26px;
-            font-family: Microsoft YaHei, Microsoft YaHei-Normal;
-            letter-spacing: 5px;
-        }
-
-        .header-right {
-            position: absolute;
-            right: 0;
-            display: flex;
-            align-items: center;
-            height: 70px;
-
-            .login-box{
-                width: 220px;
-                justify-content: flex-end;
-                position: relative;
-                .header-image{
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 50%;
-                    overflow: hidden;
-                }
-                .header-right-btn {
-                    width: 100px;
-                    height: 30px;
-                    line-height: 30px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border: none;
-                    outline: none;
-                    background-color: #3867f2;
-                    color: #fff;
-                    font-size: 16px;
-                    cursor: pointer;
-
-                    span {
-                        position: relative;
-                        color: #fff;
-                        font-size: 16px;
-                    }
-                }
-            }
-        }
-    }
+  }
 }
 
 </style>

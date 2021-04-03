@@ -33,7 +33,7 @@
             </div>
           </div>
           <div class="right">
-            <div class="right-box" :class="searchBarFixed == true ? 'isFixed':''">
+            <div class="right-box">
               <div class="right-info">
                 <h2>诗词排行榜</h2>
                 <ul class="rankList">
@@ -58,10 +58,9 @@ export default {
   },
   data() {
     return{
-      searchBarFixed:false,
       searchContent: '',
       authorAvatar: authorAvatar,
-      hoverImg: hoverImg, 
+      hoverImg: hoverImg,
       authorList: [
         {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
         {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
@@ -112,13 +111,13 @@ header {
   min-width: 870px;
   background-size: 100% 100%;
 }
-    
+
 .inner {
   height: 425px;
   display: flex;
   align-items: center;
 }
-      
+
 .search-box {
   width: 870px;
   height: 60px;
@@ -199,9 +198,9 @@ section{
                   color: rgb(255, 255, 255);
                   letter-spacing: 5px;
                 }
-                
+
                 span{
-                  display: -webkit-box; 
+                  display: -webkit-box;
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 3;
                   overflow: hidden;
@@ -246,7 +245,7 @@ section{
           width: 100%;
           background-color: #ffffff;
           text-align: center;
-          
+
           li{
             width: 100%;
             display: flex;
