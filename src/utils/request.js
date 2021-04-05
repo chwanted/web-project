@@ -12,11 +12,13 @@ const tip = mes => {
     duration: 2000
   })
 }
+// 解决跨域
+axios.defaults.withCredentials = false;
 
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_URL, // api 的 base_url
-  withCredentials: true,
+  // withCredentials: true,
   timeout: 300000 // 请求超时时间
 })
 
@@ -24,12 +26,9 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     let token = localStorage.getItem('access_token')
-    let distinctId = AnalysysAgent.getDistinctId()
-    config.headers['distinctId'] = distinctId
     if (token) {
-      config.headers['Authorization'] = 'Bearer ' + token
+      config.headers['authorization'] = token
     }
-    // config.headers['Content-Type'] = 'application/json'
     return config
   },
   error => {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Myheader></Myheader>
+    <Myheader :isColor="false"></Myheader>
     <div class="wrap">
       <header>
         <div class="inner">
@@ -11,7 +11,7 @@
               placeholder="请输入作者、诗词名称"
               @keyup.enter.native="toSearch()">
               </el-input>
-              <p @click="toSearch" style="display: flex;align-items: center;justify-content: center;">查一下</p>
+              <p @click="$utils.toPage('/searchDetail')" style="display: flex;align-items: center;justify-content: center;">查一下</p>
             </div>
           </div>
         </div>
@@ -21,11 +21,12 @@
           <div class="left">
             <div class="authorList" style="width: 100%; position: relative;">
               <ul class="author-info">
-                <li v-for="(item, index) in authorList" :key="index" class="info-list" @click="toSearch">
+                <li v-for="(item, index) in authorList" :key="index" class="info-list" @click="toAuthorDetail(item.id)">
                   <div class="author-message">
-                    <div class="authorAvatar" :style="'background-image: -webkit-cross-fade(url('+authorAvatar+'), url('+hoverImg+'), 75%);'">
-                      <h3>{{item.authorName}}</h3>
-                      <span>{{item.intro}}</span>
+                    <img :src="item.headPortraitBase64" class="headPortrait">
+                    <div class="authorAvatar">
+                      <h3>{{item.name}}</h3>
+                      <span>{{item.description}}</span>
                     </div>
                   </div>
                 </li>
@@ -34,12 +35,7 @@
           </div>
           <div class="right">
             <div class="right-box">
-              <div class="right-info">
-                <h2>诗词排行榜</h2>
-                <ul class="rankList">
-                  <li v-for="(item, index) in rankingList" :key="index" @click="toDetail(item)">{{item.name}}</li>
-                </ul>
-              </div>
+              <RankingList :rankingList = 'rankingList'></RankingList>
             </div>
           </div>
         </div>
@@ -52,45 +48,46 @@
 import header from '../components/header'
 import authorAvatar from '../assets/img/libai.jpg'
 import hoverImg from '../assets/img/hover.png'
+import RankingList from '../components/rankingList.vue'
 export default {
   components:{
     Myheader: header,
+    RankingList: RankingList
   },
   data() {
     return{
       searchContent: '',
       authorAvatar: authorAvatar,
       hoverImg: hoverImg,
-      authorList: [
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"},
-        {authorName:"李白", intro:"字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”字太白，号青莲居士，又号“谪仙人”，唐代伟大的浪漫主义诗人，被后人誉为“诗仙”"}
-      ],
-      rankingList:[
-        { name: "《蜀道难》"},
-				{ name: '《桃花源记》'},
-        { name: '《桃花源记》'},
-        { name: '《桃花源记》'},
-        { name: '《桃花源记》'},
-        { name: '《桃花源记》'},
-        { name: '《桃花源记》'},
-        { name: '《桃花源记》'},
-        { name: '《桃花源记》'},
-        { name: '《桃花源记》'}
-      ]
+      authorList: [],
+      rankingList: [],
     }
+  },
+  created(){
+    this.authorList = this.getRandomPoet()
+    this.rankingList = this.getRankingList()
   },
   methods: {
     toSearch(){
     },
-    toDetail(item){
-
+    // 获取随机诗人
+    getRandomPoet(){
+      this.$api.rank.randomPoet().then(res => {
+        this.authorList = res.data
+      })
+    },
+    // 获取排行榜
+    getRankingList(){
+      const params = {
+        page: 1,
+	      limit: 10
+      }
+      this.$api.rank.ranking(params).then(res => {
+        this.rankingList = res.data.records
+      })
+    },
+    toAuthorDetail(id){
+      this.$utils.toPage('/authorDetail?id='+id)
     }
   }
 }
@@ -180,26 +177,39 @@ section{
             .author-message{
               margin: 0 10px;
               height: 178px;
+              position: relative;  
 
-              .authorAvatar{
+              .headPortrait{
                 width: 100%;
                 height: 100%;
-                background-size: 100% 100% !important;
+                object-fit: cover;
+                display: inline-block;
+              }
+
+              .authorAvatar{
+                position: absolute; 
+                top:0px;
+                height: 178px;
+                width: 178px;
+                background: url('../assets/img/hover.png');
+                background-size: contain;
                 padding: 0px 4px;
-                font-size: 13px;
                 display: flex;
                 flex-direction:column;
                 justify-content: flex-end;
                 font-family: Microsoft YaHei, Microsoft YaHei-Normal;
+                z-index: 2;
 
                 h3{
                   text-align: right;
                   margin-bottom: 4px;
                   color: rgb(255, 255, 255);
                   letter-spacing: 5px;
+                  font-weight: normal;
                 }
 
                 span{
+                  font-size: 11px;
                   display: -webkit-box;
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 3;
