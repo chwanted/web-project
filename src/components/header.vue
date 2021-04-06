@@ -3,18 +3,21 @@
     <div class="header wrap" :class="{fixed: isFixed}">
         <div class="header-container inner">
             <div @click="$utils.toPage('/')" style="cursor: pointer">
-                <div class="title" style="color: #343539;">古诗文鉴赏</div>
+                <div v-if="isFixed" class="title" style="color: rgb(138, 138, 138);">古诗文鉴赏</div>
+                <div v-else-if="!isFixed && isColor" class="title" style="color: rgb(138, 138, 138);">古诗文鉴赏</div>
+                <div v-else class="title" style="color: #FFFF;">古诗文鉴赏</div>
             </div>
             <div class="header-right">
                 <div class="login-box flex-row">
                     <div v-if="hasLogin" class="flex-row">
                         <div class="download-center">
-                            <img class="download" :src=downloadImg  @click="$utils.toPage('/download')"/>
+                            <i v-if="isFixed" class="el-icon-download download" style="font-size:26px;color: rgb(138, 138, 138);" @click="$utils.toPage('/download')"/>
+                            <i v-else class="el-icon-download download" style="font-size:26px;color: #fff;" @click="$utils.toPage('/download')"/>
                         </div>
-                        <img v-if="userImg" class="avatar" :src="userImg"/>
-                        <img v-else class="avatar" :src="defaultUserImg"/>
+                        <img v-if="headerIcon=='null'" class="avatar" :src="defaultUserImg"/>
+                        <img v-else-if="headerIcon" class="avatar" :src="headerIcon"/>
                         <el-dropdown @command="logout">
-                            <span class="el-dropdown-link" :class="{white: !isColor}" style="font-size: 15px;color: #8a8a8a;">{{username}}</span>
+                            <div class="el-dropdown-link" style="font-size: 15px;color: rgb(138, 138, 138);">{{username}}</div>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item>退出登录</el-dropdown-item>
                             </el-dropdown-menu>
@@ -51,10 +54,11 @@
               class="avatar-uploader"
               action
               :http-request="httpRequest"
-              :on-remove="handleRemove"
+              :on-success="handleAvatarSuccess"
+              :on-change="onchange"
               :before-upload="beforeAvatarUpload"
               :show-file-list="false">
-              <img v-if="registerForm.headerImage" :src="registerForm.headerImage" class="avatar">
+              <img v-if="imageUrl" :src="imageUrl" class="avatar">
               <img :src="avatarUpload" class="avatar" v-else>
             </el-upload>
           </el-form-item>
@@ -85,8 +89,19 @@ import defaultUserImg from '../assets/img/avatar.png'
 import bg2 from '../assets/img/bg2.png'
 import avatarUpload from '../assets/img/avatarUpload.png'
 export default {
+  props: {
+    isColor: {
+      type: Boolean,
+      default: true
+    },
+    isFixed: {
+      type: Boolean,
+      default: true
+    }
+  },
   data(){
     return{
+      imageUrl:'',
       showLogin: true,
       showRegister: false,
       downloadImg: downloadImg,
@@ -94,12 +109,12 @@ export default {
       defaultUserImg: defaultUserImg,
       headerImage:'',
       bg2: bg2,
-      isFixed: true,
+      // isFixed: true,
       loginText: '登录',
       registerText: '注册',
       dialogVisible: false,
       username: localStorage.username,
-      userImg: localStorage.userImg,
+      headerIcon: localStorage.userImg,
       hasLogin: localStorage.getItem('hasLogin') || false,
       loginForm: {
         account:'',
@@ -124,37 +139,6 @@ export default {
       }
     }
   },
-  watch: {
-    '$store.state.user.hasLogin' (val) { //监听用户登录状态改变
-      if(!val) {
-        this.hasLogin = false
-        this.$store.commit('user/setLoginStatus', false)
-        localStorage.removeItem('hasLogin')
-        localStorage.removeItem('account')
-        localStorage.removeItem('username')
-        localStorage.removeItem('userImg')
-        localStorage.removeItem('userId')
-        localStorage.removeItem('access_token')
-      }else
-      {
-        //登录成功加载用户信息
-        this.loadUserInfo();
-      }
-    },
-    '$store.state.user.isLogin' (val) { //弹出登录界面
-      if(val) {
-        this.hasLogin = false
-        this.$store.commit('user/setLoginStatus', false)
-        localStorage.removeItem('hasLogin')
-        localStorage.removeItem('account')
-        localStorage.removeItem('username')
-        localStorage.removeItem('userImg')
-        localStorage.removeItem('userId')
-        localStorage.removeItem('access_token')
-        this.login();
-      }
-    },
-  },
   methods: {
     loadUserInfo(){
       location.reload()
@@ -176,8 +160,8 @@ export default {
     },
     // 显示登录弹窗
     login(){
-        this.$store.commit('user/gotoLogin', false)
-        this.$store.commit('user/isShowLogin', true)
+        // this.$store.commit('user/gotoLogin', false)
+        // this.$store.commit('user/isShowLogin', true)
         this.dialogVisible = true
         this.loginForm.account = ''
         this.loginForm.pwd = ''
@@ -198,15 +182,17 @@ export default {
             if (res.msg === '操作成功') {
               this.$message({message: '登录成功！', type: 'success'})
               this.hasLogin = true
-              this.$store.commit('user/isShowLogin', false)
-              this.$store.commit('user/setLoginStatus', true)
+              // this.$store.commit('user/isShowLogin', false)
+              // this.$store.commit('user/setLoginStatus', true)
               this.dialogVisible = false
               localStorage.setItem('hasLogin', true)
-              localStorage.setItem('account', this.account)
+              localStorage.setItem('account', this.loginForm.account)
               localStorage.setItem('username', res.data.name)
               localStorage.setItem('userId', res.data.id)
               localStorage.setItem('userImg', res.data.headPortraitBase64)
               localStorage.setItem('access_token', res.data.token)
+              this.username = localStorage.getItem('username')
+              this.headerIcon = localStorage.getItem('userImg')
             } else {
               this.$message.error(res.msg)
             }
@@ -221,9 +207,9 @@ export default {
           this.$api.user.addUser(this.registerForm).then(res => {
             this.registerText = '注册中'
             if (res.msg === '操作成功') {
-              this.$message({message: '注册成功，请登录！', type: 'success'})
-              this.$store.commit('user/isShowLogin', true)
-              this.toLogin()
+              this.loginForm.account = this.registerForm.account
+              this.loginForm.pwd = this.registerForm.pwd
+              this.loginAction(this.loginForm)
             } else {
               this.$message.error(res.msg)
             }
@@ -236,7 +222,7 @@ export default {
         if (res.msg === '操作成功') {
           this.$message({message: '退出成功！', type: 'success'})
           this.hasLogin = false
-          this.$store.commit('user/setLoginStatus', false)
+          // this.$store.commit('user/setLoginStatus', false)
           localStorage.removeItem('hasLogin')
           localStorage.removeItem('account')
           localStorage.removeItem('username')
@@ -256,7 +242,7 @@ export default {
       })
     },
     closeLogin(){
-      this.$store.commit('user/isShowLogin', false)
+      // this.$store.commit('user/isShowLogin', false)
     },
     // 上传
     httpRequest(file) {
@@ -265,37 +251,57 @@ export default {
       this.$api.user.addImg(fd).then(res=>{
         if(res.code===0)
         {
-          this.registerForm.headerImage = res.data;
-          this.$message.success("更新成功");
+          this.registerForm.headerImage = res.data
+          this.$message.success("更新成功")
         }else
         {
-          this.$message.error(res.msg);
+          this.$message.error(res.msg)
         }
       })
     },
+    onchange(file,fileList){
+      var _this = this;
+      var event = event || window.event
+      var file = event.target.files[0]
+      var reader = new FileReader()
+      //转base64
+      reader.onload = function(e) {
+        _this.imageUrl = e.target.result //将图片路径赋值给src
+      }
+      reader.readAsDataURL(file)
+    },
+    handleAvatarSuccess(res, file) {
+      this.imageUrl = URL.createObjectURL(file.raw)
+    },
     //对上传图片的大小、格式进行限制
     beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isJPG2 = file.type === "image/jpg";
-      const isPNG = file.type === "image/png";
-      const isLt5M = file.size / 1024 / 1024 < 5;
+      const isJPG = file.type === "image/jpeg"
+      const isJPG2 = file.type === "image/jpg"
+      const isPNG = file.type === "image/png"
+      const isLt5M = file.size / 1024 / 1024 < 5
       if (!isJPG && !isJPG2 && !isPNG) {
-        this.$message.warning("只支持jpg或png格式图片");
+        this.$message.warning("只支持jpg或png格式图片")
       }
       if (!isLt5M) {
-        this.$message.warning("请上传5MB以内的图片!");
+        this.$message.warning("请上传5MB以内的图片!")
       }
-      return (isJPG || isJPG2 || isPNG) && isLt5M;
-    },
-    // 移除
-    handleRemove(file) {
-      this.imageUrl = "";
+      return (isJPG || isJPG2 || isPNG) && isLt5M
     },
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  >>>.el-dropdown-link {
+    cursor: pointer;
+    margin-left: 6px;
+    font-size: 14px;
+
+    &.white,
+    &.white .el-icon-caret-bottom{
+      color: #fff;
+    }
+  }
   .header {
     width: 100%;
     height: 70px !important;

@@ -8,7 +8,7 @@ Vue.use(Vuex)
 
 //实例化vuex
 export default new Vuex.Store({
-    module: {
+    modules: {
         user
     }
 })

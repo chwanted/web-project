@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Myheader :isColor="false"></Myheader>
+    <Myheader :isfixed="false"></Myheader>
     <div class="wrap">
       <section>
         <div class="inner content-center">
@@ -19,20 +19,26 @@
             <div class="comment-list">
               <div class="comment-commit flex">
                 <div class="commentator flex-column">
-                  <img class="avatar" :src="userAvatar">
+                  <img v-if="userAvatar=='null'" class="avatar" :src="defaultUserImg"/>
+                  <img v-else-if="userAvatar" class="avatar" :src="userAvatar"/>
                   <span class="commentator-name">{{username}}</span>
                 </div>
                 <div class="comment">
                   <el-form
                     :model="comment"
-                    :rules="formRules"
                     ref="comment"
                     class="commentForm"
                   >
-                    <el-form-item prop="commentContent">
+                    <el-form-item 
+                      prop="content" 
+                      :rules="[
+                        { required: true, message: '请输入评论信息'},
+                        { min: 2, max: 200, message: '长度在 2 到 200 个字符'}
+                      ]"
+                    >
                       <el-input
                         type="textarea"
-                        placeholder="请输入内容"
+                        placeholder="请输入评论信息"
                         v-model="comment.content"
                         maxlength="200"
                         show-word-limit
@@ -62,8 +68,8 @@
                   @size-change="handleSizeChange"
                   @current-change="handleCurrentChange"
                   layout="slot, prev, pager, next"
-                  :current-page="this.query.page"
-                  :page-size="this.query.limit"
+                  :current-page="this.commentForm.page"
+                  :page-size="this.commentForm.limit"
                   :total="total"
                   v-if="total != 0">
                   <span class="page-total">共<span>{{ realTotal }}</span>条</span>
@@ -92,6 +98,7 @@
 
 <script>
 import avatar from '../assets/img/avatar.png'
+import defaultUserImg from '../assets/img/avatar.png'
 import header from '../components/header'
 import RankingList from '../components/rankingList.vue'
 export default {
@@ -104,6 +111,7 @@ export default {
       total:0,
       realTotal: 0,
       avatar: avatar,
+      defaultUserImg:defaultUserImg,
       userAvatar: localStorage.userImg,
       authorAvatar: '',
       username: localStorage.username,
@@ -178,12 +186,12 @@ export default {
     },
     //分页
     handleSizeChange(e){
-      this.query.page = e
-      this.getList()
+      this.commentForm.page = e
+      this.getPoetryInfo()
     },
     handleCurrentChange(e){
-      this.query.page = e
-      this.getList()
+      this.commentForm.page = e
+      this.getPoetryInfo()
     },
     // 获取排行榜
     getRankingList(){
@@ -202,7 +210,7 @@ export default {
           this.$api.comment.addComment(this.comment).then(res => {
             if (res.msg === '操作成功') {
               this.$message({message: '评论成功！', type: 'success'})
-              Location.reload(force)
+              location.reload()
             } else {
               this.$message.error(res.msg)
             }
@@ -224,59 +232,22 @@ export default {
 
 <style lang="scss" scoped>
 .page-total{
-  font-size: 14px;
+  font-size: 11px;
   padding-right: 27px;
   color: #8e8f93;
   font-weight: normal;
   span{
-    font-size: 18px;
+    font-size: 13px;
     padding:0 5px;
     color: #4f5054;
     font-weight: normal;
     text-align: center;
   }
 }
->>>.el-pagination{
+/deep/.el-pagination{
   float: right;
   padding: 25px 0;
-}
->>>.el-pagination .btn-next, >>>.el-pagination .btn-prev{
-  background: transparent;
-  border: 1px solid #3867f2;
-  padding: 0 5px;
-  height: 25px!important;
-  line-height: 25px!important;
-  min-width: auto!important;
-  color: #3867f2;
-}
->>>.el-pagination button:disabled{
-  background: transparent;
-  border: 1px solid #3867f2;
-  height: 25px!important;
-  line-height: 25px!important;
-  min-width: auto!important;
-}
->>>.el-pager li{
-  background: #fff;
-  margin: 0 5px;
-  padding: 0 6px;
-  min-width: auto!important;
-  border: 1px solid #e1e2e5;
-  font-size: 12px;
-  font-weight: normal;
-  color: #4f5054;
-  height: 25px!important;
-  line-height: 25px!important;
-}
->>>.el-icon-arrow-down{
-  color: #f6bd6c;
-}
->>>.el-pagination .btn-prev{
-  padding-right: 5px!important;
-}
->>>.el-pager li.active{
-  color: #fff!important;
-  background-color: #3867f2!important;
+  margin-right: 43px;
 }
 
 .el-form {
@@ -361,7 +332,10 @@ margin: 20px 20px 0 0;
         .comment-list{
           background: #FFF;
           box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.10);
+          
+          .pagination{
 
+          }
           .comment-commit{
             display: flex;
             justify-content: center;
@@ -403,16 +377,19 @@ margin: 20px 20px 0 0;
                 padding: 20px 0;
 
                 .user-comment {
+                  width: 100%;
                   .user-name{
                     color: #66b1ff;
                     font-size: 14px;
                     display:block;
                   }
                   .user-comment{
-                    color: #323232;
+                    color: #58595d;
                     font-size: 13px;
                     padding: 0 0 0 30px;
                     text-indent: 0 !important;
+                    width: 100%;
+                    word-break: break-word;
                   }
                 }
               }

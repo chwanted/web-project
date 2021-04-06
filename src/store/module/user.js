@@ -19,13 +19,16 @@ const mutations = {
     //弹出登录框
     isShowLogin(state, isShowLogin){
         state.isShowLogin = isShowLogin
+    },
+    //保存用户信息
+    setUserInfo(state,userInfo) { 
+        state.userInfo = userInfo
     }
 }
 
 const actions = {}
 
 export default{
-    namespaced: true,
     state,
     getters,
     mutations,
