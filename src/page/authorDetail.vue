@@ -6,23 +6,35 @@
         <div class="inner content-center">
           <div class="left flex">
             <div class="authorInfo flex">
-              <img class="authorImg" :src="authorImg"/>
+              <img class="authorImg" :src="poetInfo.headPortraitBase64"/>
               <div class="authorInfo-right">
-                <h2>李白</h2>
-                <p>zheshi libai ,biecai le</p>
+                <h2>{{poetInfo.name}}</h2>
+                <p>{{poetInfo.description}}</p>
               </div>
             </div>
             <div class="poetry" v-if="poetryList!=''">
-              <span class="hot">代表作</span>
-              <PoetryList :poetryList = 'poetryList'></PoetryList>
+              <PoetryList :poetryList = 'poetryList'>
+                <!-- <div class="pagination">
+                  <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    layout="slot, prev, pager, next"
+                    :current-page="this.form.page"
+                    :page-size="this.form.limit"
+                    :total="total"
+                    v-if="total != 0">
+                    <span class="page-total">共<span>{{ total }}</span>条</span>
+                  </el-pagination>
+                </div> -->
+              </PoetryList>
             </div>
           </div>
           <div class="right">
             <div class="right-box">
               <div class="other-poet">
-                <h2>热门诗人</h2>
+                <h2>推荐诗人</h2>
                 <ul class="poetList">
-                  <li v-for="(item, index) in poetList" :key="index" @click="toAuthorDetail(item)">{{item.poet}}</li>
+                  <li v-for="(item, index) in poetList" :key="index" @click="toAuthorDetail(item.id)">{{item.name}}</li>
                 </ul>
               </div>
             </div>
@@ -43,27 +55,47 @@ export default {
   },
   data(){
     return{
-      authorImg:'',
       poetId:{
         id:'',
       },
+      poetList:[],
       poetInfo:{},
       poetryList:[],
     }
   },
+  watch:{
+    // 监听路由参数变化
+    '$route.query': {
+      handler() {
+        this.poetId.id = this.$route.query.id
+        this.loadInfo()
+      },
+      deep: true,
+    }
+  },
   mounted(){
     this.poetId.id = this.$route.query.id
-    console.log(this.poetId.id)
-    this.getPoetInfo()
+    this.loadInfo()
   },
   methods:{
+    loadInfo(){
+      this.getPoetInfo()
+      this.getHotPoet()
+    },
+    getHotPoet(){
+        this.$api.rank.randomPoet().then(res => {
+        this.poetList = res.data
+      })
+    },
     getPoetInfo(){
       this.$api.detail.poet(this.poetId).then(res => {
         this.poetInfo = res.data
         this.poetryList = res.data.poetryEntities
-        console.log(res)
       })
     },
+    toAuthorDetail(id){
+      this.$utils.toPage('/authorDetail?id='+id)
+    }
   }
 }
 </script>
@@ -108,7 +140,7 @@ export default {
             h2{
               font-weight: normal;
               letter-spacing: 4px;
-              margin-bottom: 5px;
+              margin-bottom: 10px;
             }
             p{
               text-indent: 2em;
