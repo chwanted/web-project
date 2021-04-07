@@ -12,8 +12,9 @@
                 <p>zheshi libai ,biecai le</p>
               </div>
             </div>
-            <div class="poetry">
-              <PoetryList></PoetryList>
+            <div class="poetry" v-if="poetryList!=''">
+              <span class="hot">代表作</span>
+              <PoetryList :poetryList = 'poetryList'></PoetryList>
             </div>
           </div>
           <div class="right">
@@ -46,19 +47,22 @@ export default {
       poetId:{
         id:'',
       },
+      poetInfo:{},
+      poetryList:[],
     }
   },
   mounted(){
     this.poetId.id = this.$route.query.id
+    console.log(this.poetId.id)
     this.getPoetInfo()
   },
   methods:{
     getPoetInfo(){
-      // this.$api.detail.poet(this.poetId).then(res => {
-      //   this.poetInfo = res.data
-      //   this.authorAvatar = res.data.headPortraitBase64
-      //   console.log(res)
-      // })
+      this.$api.detail.poet(this.poetId).then(res => {
+        this.poetInfo = res.data
+        this.poetryList = res.data.poetryEntities
+        console.log(res)
+      })
     },
   }
 }

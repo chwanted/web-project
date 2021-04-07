@@ -2,7 +2,7 @@
   <div>
     <div class="wrap">
       <div class="banner">
-        <Myheader :isColor="false"></Myheader>
+        <Myheader :class="{ fixed: isFixed }"></Myheader>
       </div>
       <div class="inner">
         <div class="search-box">
@@ -22,6 +22,7 @@ export default {
   data(){
     return{
       bg: bg,
+      isFixed:false
     }
   }
 }

@@ -179,9 +179,7 @@ export default {
         this.url = res.data.url
         this.total = res.data.comments.total
         this.realTotal = res.data.comments.total
-        this.allIndex = Math.ceil(this.total / 10)
         this.msg = res.data.comments.records
-        console.log(this.msg)
       })
     },
     //分页

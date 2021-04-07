@@ -3,15 +3,14 @@
     <div class="header wrap" :class="{fixed: isFixed}">
         <div class="header-container inner">
             <div @click="$utils.toPage('/')" style="cursor: pointer">
-                <div v-if="isFixed" class="title" style="color: rgb(138, 138, 138);">古诗文鉴赏</div>
-                <div v-else-if="!isFixed && isColor" class="title" style="color: rgb(138, 138, 138);">古诗文鉴赏</div>
+                <div v-if="isFixed" class="title" style="color: #58595d;">古诗文鉴赏</div>
                 <div v-else class="title" style="color: #FFFF;">古诗文鉴赏</div>
             </div>
             <div class="header-right">
                 <div class="login-box flex-row">
                     <div v-if="hasLogin" class="flex-row">
                         <div class="download-center">
-                            <i v-if="isFixed" class="el-icon-download download" style="font-size:26px;color: rgb(138, 138, 138);" @click="$utils.toPage('/download')"/>
+                            <i v-if="isFixed" class="el-icon-download download" style="font-size:26px;color: #58595d" @click="$utils.toPage('/download')"/>
                             <i v-else class="el-icon-download download" style="font-size:26px;color: #fff;" @click="$utils.toPage('/download')"/>
                         </div>
                         <img v-if="headerIcon=='null'" class="avatar" :src="defaultUserImg"/>
@@ -90,10 +89,6 @@ import bg2 from '../assets/img/bg2.png'
 import avatarUpload from '../assets/img/avatarUpload.png'
 export default {
   props: {
-    isColor: {
-      type: Boolean,
-      default: true
-    },
     isFixed: {
       type: Boolean,
       default: true
