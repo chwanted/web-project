@@ -103,7 +103,6 @@ export default {
       avatarUpload: avatarUpload,
       defaultUserImg: defaultUserImg,
       headerImage:'',
-      bg2: bg2,
       // isFixed: true,
       loginText: '登录',
       registerText: '注册',

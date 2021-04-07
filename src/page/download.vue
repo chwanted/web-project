@@ -25,7 +25,7 @@
           </el-pagination>
         </div>
         <div class="no-result" v-if="total <= 0">
-          <img :src="noDownload"/>
+          <img :src="noDownload" class="noDownload"/>
           <p>暂无下载，快去下载一些诗词吧~</p>
         </div>
       </section>
@@ -92,6 +92,7 @@ export default {
   section{
     width: 100%;
     margin: 0 auto;
+
     h3{
       font-weight: normal;
       letter-spacing: 2px;
@@ -107,10 +108,11 @@ export default {
       list-style: none;
 
       li{
+        margin-top: 20px;
         background: #fff;
         box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.10);
         padding: 30px;
-        border-top: 1px solid #dcdee4;
+        border-bottom: 1px solid #dcdee4;
 
         .download{
 
@@ -144,10 +146,18 @@ export default {
     }
 
     .no-result{
+      text-align:center;
       margin: 0 auto;
       width: 1000px;
       font-size: 14px;
-      color:#58595d;
+      color:#999999;
+
+      .noDownload{
+        width: 200px;
+        margin-top: 50px;
+        margin-bottom: 30px;
+        letter-spacing: 1px;
+      }
     }
   }
 }

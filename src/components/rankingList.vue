@@ -32,20 +32,20 @@ export default {
     background-color: #fff;
 
     h2{
-    font-family: MicrosoftYaHei;
-    font-size: 18px;
-    letter-spacing: 1px;
-    color: #343539;
-    border-bottom: 1px solid #dbdcdf;
-    padding: 0 18px;
-    line-height: 40px;
-    display: flex;
-    font-weight: normal;
+        font-family: MicrosoftYaHei;
+        font-size: 18px;
+        letter-spacing: 1px;
+        color: #343539;
+        border-bottom: 1px solid #dbdcdf;
+        padding: 0 18px;
+        line-height: 40px;
+        display: flex;
+        font-weight: normal;
     }
     .rankList{
-    width: 100%;
-    background-color: #ffffff;
-    text-align: center;
+        width: 100%;
+        background-color: #ffffff;
+        text-align: center;
 
         li{
             width: 100%;

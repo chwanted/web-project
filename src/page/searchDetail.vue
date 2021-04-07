@@ -54,6 +54,7 @@
           </el-pagination>
         </div>
         <div class="no-result" v-if="poetryList.length <= 0">
+          <img :src="noResult" class="noResult">
           <p>暂无搜索结果，修改一下搜索条件吧~</p>
         </div>
       </div>
@@ -65,6 +66,7 @@
 import header from '../components/header.vue'
 import bg from '../assets/img/bg.png'
 import poetryList from '../components/poetryList.vue'
+import noResult from '../assets/img/noResult.png'
 export default {
   components: { 
     Myheader: header,
@@ -72,6 +74,7 @@ export default {
   },
   data(){
     return{
+      noResult: noResult,
       bg: bg,
       poetryList:[],
       total:0,
@@ -178,8 +181,14 @@ export default {
         }
       }
     }
-  }
 
-  
+    .no-result{
+      text-align: center;
+
+      .noResult{
+        width: 200px;
+      }
+    }
+  }
 }
 </style>
