@@ -16,7 +16,8 @@
                         <img v-if="headerIcon=='null'" class="avatar" :src="defaultUserImg"/>
                         <img v-else-if="headerIcon" class="avatar" :src="headerIcon"/>
                         <el-dropdown @command="logout">
-                            <div class="el-dropdown-link" style="font-size: 15px;color: rgb(138, 138, 138);">{{username}}</div>
+                            <div v-if="isFixed" class="el-dropdown-link" style="font-size: 15px;color: rgb(138, 138, 138);">{{username}}</div>
+                            <div v-else class="el-dropdown-link" style="font-size: 15px;color: #fff;">{{username}}</div>
                             <el-dropdown-menu slot="dropdown">
                                 <el-dropdown-item>退出登录</el-dropdown-item>
                             </el-dropdown-menu>
@@ -27,7 +28,7 @@
             </div>
         </div>
     </div>
-    <el-dialog :visible.sync="dialogVisible" :modal-append-to-body="true" @close="closeLogin" :close-on-click-modal="false" class="login">
+    <el-dialog :visible.sync="dialogVisible" :modal-append-to-body="true" :close-on-click-modal="false" class="login">
       <div class="login-dialog" v-show="showLogin">
         <h4>用户登录</h4>
         <el-form ref="loginForm" style="padding-top: 5px;" :model="loginForm" :rules="rules">
@@ -155,8 +156,6 @@ export default {
     },
     // 显示登录弹窗
     login(){
-        // this.$store.commit('user/gotoLogin', false)
-        // this.$store.commit('user/isShowLogin', true)
         this.dialogVisible = true
         this.loginForm.account = ''
         this.loginForm.pwd = ''
@@ -177,8 +176,6 @@ export default {
             if (res.msg === '操作成功') {
               this.$message({message: '登录成功！', type: 'success'})
               this.hasLogin = true
-              // this.$store.commit('user/isShowLogin', false)
-              // this.$store.commit('user/setLoginStatus', true)
               this.dialogVisible = false
               localStorage.setItem('hasLogin', true)
               localStorage.setItem('account', this.loginForm.account)
@@ -217,7 +214,6 @@ export default {
         if (res.msg === '操作成功') {
           this.$message({message: '退出成功！', type: 'success'})
           this.hasLogin = false
-          // this.$store.commit('user/setLoginStatus', false)
           localStorage.removeItem('hasLogin')
           localStorage.removeItem('account')
           localStorage.removeItem('username')
@@ -235,9 +231,6 @@ export default {
           this.$message.error(res.msg)
         }
       })
-    },
-    closeLogin(){
-      // this.$store.commit('user/isShowLogin', false)
     },
     // 上传
     httpRequest(file) {
@@ -356,8 +349,8 @@ export default {
               cursor: pointer;
             }
             .avatar {
-              width: 29px;
-              height: 29px;
+              width: 39px;
+              height: 39px;
               border-radius: 50%;
               overflow: hidden;
               margin-right: 10px;

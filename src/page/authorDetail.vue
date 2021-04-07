@@ -14,18 +14,18 @@
             </div>
             <div class="poetry" v-if="poetryList!=''">
               <PoetryList :poetryList = 'poetryList'>
-                <!-- <div class="pagination">
+                <div class="pagination">
                   <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
                     layout="slot, prev, pager, next"
-                    :current-page="this.form.page"
-                    :page-size="this.form.limit"
+                    :current-page="this.poetId.page"
+                    :page-size="this.poetId.limit"
                     :total="total"
                     v-if="total != 0">
                     <span class="page-total">共<span>{{ total }}</span>条</span>
                   </el-pagination>
-                </div> -->
+                </div>
               </PoetryList>
             </div>
           </div>
@@ -55,8 +55,11 @@ export default {
   },
   data(){
     return{
+      total:0,
       poetId:{
         id:'',
+        page: 1,
+        limit: 5,
       },
       poetList:[],
       poetInfo:{},
@@ -90,17 +93,33 @@ export default {
     getPoetInfo(){
       this.$api.detail.poet(this.poetId).then(res => {
         this.poetInfo = res.data
-        this.poetryList = res.data.poetryEntities
+        this.poetryList = res.data.poetryEntities.records
+        this.total = res.data.poetryEntities.total
       })
     },
     toAuthorDetail(id){
       this.$utils.toPage('/authorDetail?id='+id)
-    }
+    },
+    //分页
+    handleSizeChange(e){
+      this.poetId.page = e
+      this.getDownloadList()
+    },
+    handleCurrentChange(e){
+      this.poetId.page = e
+      this.getDownloadList()
+    },
   }
 }
 </script>
 
 <style lang="scss" scoped>
+/deep/.el-pagination{
+  margin: 0 auto;
+  width: 800px;
+  text-align: center !important;
+}
+
 .wrap{
   width: 100%;
   margin: 0 auto;
@@ -133,6 +152,7 @@ export default {
 
           .authorImg{
             width: 178px;
+            height: 226px;
             object-fit: cover;
             margin-right: 20px;
           }
@@ -146,6 +166,25 @@ export default {
               text-indent: 2em;
               letter-spacing: 1px; 
               font-size:15px;
+              color: #58595d;
+            }
+          }
+        }
+
+        .poetry{
+          .pagination{
+            .page-total{
+              font-size: 11px;
+              padding-right: 27px;
+              color: #8e8f93;
+              font-weight: normal;
+              span{
+                font-size: 13px;
+                padding:0 5px;
+                color: #4f5054;
+                font-weight: normal;
+                text-align: center;
+              }
             }
           }
         }

@@ -4,5 +4,6 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
-  BASE_URL: '"http://47.108.182.23:8080/"'
+  // BASE_URL: '"http://t6ttge.natappfree.cc"',
+  BASE_URL: '"http://47.108.182.23:8080"'
 })

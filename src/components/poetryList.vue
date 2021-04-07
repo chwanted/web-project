@@ -4,7 +4,7 @@
             <li v-for="(item,index) in poetryList" :key="index" @click="toDetail(item)">
                 <div class="poetry">
                     <div class="poetry-top flex">
-                        <h3>{{ item.name }}
+                        <h3>{{ '《'+item.name+'》'}}
                             <span class="poet">{{ item.poet }}</span>
                         </h3>
                         <div class="tag">{{ item.type }}</div>
@@ -29,7 +29,6 @@ export default {
         // 跳转详情页
         toDetail(item){
             let {id,poetId} =item
-            console.log(id,poetId)
             this.$utils.toPage(`/detail?poetryId=${id}&poetId=${poetId}`)
         }
     }
@@ -51,6 +50,7 @@ export default {
             .poetry{
                 justify-items: center;
                 padding: 20px 0;
+                cursor: pointer;
 
                 .poetry-top{
                     display: flex;
@@ -86,6 +86,9 @@ export default {
                     -webkit-box-orient: vertical;
                     -webkit-line-clamp: 1;
                     overflow: hidden;
+                    font-size: 14px;
+                    text-indent: 2em;
+                    color: #58595d;
                 }
             }
         }

@@ -3,8 +3,8 @@
     <Myheader></Myheader>
     <div class="wrap">
       <section>
-        <ul class="downloadList">
-          <h3>▏下载中心</h3>
+        <h3>▏下载中心</h3>
+        <ul class="downloadList" v-if="downloadList.length >0">
           <li v-for="(item,index) in downloadList" :key="index">
             <div class="download">
               <span class="poetry">{{ '《'+item.poetry+'》' }}</span>
@@ -24,6 +24,10 @@
             <span class="page-total">共<span>{{ total }}</span>条</span>
           </el-pagination>
         </div>
+        <div class="no-result" v-if="total <= 0">
+          <img :src="noDowanload"/>
+          <p>暂无下载，快去下载一些诗词吧~</p>
+        </div>
       </section>
     </div>
   </div>
@@ -31,12 +35,14 @@
 
 <script>
 import header from '../components/header'
+import noDowanload from '../assets/img/noDowanload.png'
 export default {
   components:{
     Myheader: header,
   },
   data(){
     return{
+      noDowanload: noDowanload, 
       total:0,
       realTotal: 0,
       downloadList:[],
@@ -72,7 +78,8 @@ export default {
 
 <style lang="scss" scoped>
 /deep/.el-pagination{
-  float: right;
+  margin: 0 auto;
+  width: 1000px;
   padding: 25px 0;
   margin-right: 43px;
 }
@@ -85,18 +92,19 @@ export default {
   section{
     width: 100%;
     margin: 0 auto;
-
+    h3{
+      font-weight: normal;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      color: #66b1ff;
+      margin: 0 auto;
+      width: 1000px;
+    }
+    
     .downloadList{
       margin: 0 auto;
       width: 1000px;
       list-style: none;
-        
-      h3{
-        font-weight: normal;
-        letter-spacing: 2px;
-        margin-bottom: 20px;
-        color: #66b1ff;
-      }
 
       li{
         background: #fff;
@@ -133,6 +141,13 @@ export default {
           text-align: center;
         }
       }
+    }
+
+    .no-result{
+      margin: 0 auto;
+      width: 1000px;
+      font-size: 14px;
+      color:#58595d;
     }
   }
 }

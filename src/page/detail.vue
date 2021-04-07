@@ -42,6 +42,14 @@
                         v-model="comment.content"
                         maxlength="200"
                         show-word-limit
+                        v-if="hasLogin"
+                      ></el-input>
+                      <el-input
+                        type="textarea"
+                        placeholder="请输入评论信息"
+                        v-model="comment.content"
+                        v-else
+                        :disabled="true"
                       ></el-input>
                     </el-form-item>
                     <div class="btn">
@@ -53,14 +61,14 @@
               <ul class="show-commons">
                 <li v-for="item in msg" :key="item.id">
                   <div class="comment-info flex">
-                    <img :src="item.headerImage" v-if="item.headerImage" style="width: 42px;height: 42px">
-                    <img :src="avatar" v-else-if="!item.headerImage" style="width: 42px;height: 42px">
+                    <img :src="item.headerImage" v-if="item.headerImage" style="width: 42px;height: 42px;border-radius: 50%;object-fit: cover;">
+                    <img :src="avatar" v-else-if="!item.headerImage" style="width: 42px;height: 42px;border-radius: 50%;object-fit: cover;">
                     <div class="inner user-comment">
                       <span class="user-name">{{ item.userName }}</span>
                       <p class="user-comment">{{ item.content }}</p>
                     </div>
                   </div>
-                  <span class="publishing-time">{{ item.createTime }}发表</span>
+                  <span class="publishing-time">{{ item.createTime +' '}}发表</span>
                 </li>
               </ul>
               <div class="pagination">
@@ -109,6 +117,7 @@ export default {
   data(){
     return{
       total:0,
+      hasLogin:localStorage.hasLogin,
       realTotal: 0,
       avatar: avatar,
       defaultUserImg:defaultUserImg,
@@ -135,7 +144,7 @@ export default {
       },
       formRules: {
         content: [
-          { required: true, message: '请输入评论信息', trigger: 'blur' },
+          { required: true, trigger: 'blur' },
           { min: 2, max: 200, message: '长度在 2 到 200 个字符', trigger: 'blur' }
         ]
       }
@@ -203,22 +212,32 @@ export default {
     },
     // 添加评论
     addComments(){
-      this.$refs.comment.validate(async (valid) => {
-        if (valid) {
-          this.$api.comment.addComment(this.comment).then(res => {
-            if (res.msg === '操作成功') {
-              this.$message({message: '评论成功！', type: 'success'})
-              location.reload()
-            } else {
-              this.$message.error(res.msg)
-            }
-          })
-        }
-      })
+      if(!this.hasLogin){
+        this.$message.error('请先登录！')
+      }else{
+        this.$refs.comment.validate(async (valid) => {
+          if (valid) {
+            this.$api.comment.addComment(this.comment).then(res => {
+              if (res.msg === '操作成功') {
+                this.$message({message: '评论成功！', type: 'success'})
+                location.reload()
+              } else {
+                this.$message.error(res.msg)
+              }
+            })
+          }
+        })
+      }
     },
     // 下载
     download(){
-      window.location.href = process.env.BASE_URL+this.poemInfo.url
+      var token = localStorage.getItem("access_token")
+      console.log(token)
+      var tokenEn ;
+      if(token){
+        tokenEn = token.replace(/#/g,'liuchaojun');
+      }
+      window.location.href = process.env.BASE_URL+this.poemInfo.url+"&id="+ this.poemInfo.id + "&token="+tokenEn;
     },
     // 去作者详情页
     toAuthorDetail(){
@@ -319,7 +338,7 @@ margin: 20px 20px 0 0;
             .info{
               margin-top: 10px;
               font-size: 15px;
-              color:#333333;
+              color:#58595d;
               letter-spacing: 2px;
               line-height: 25px;
             }
