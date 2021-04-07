@@ -25,7 +25,7 @@
           </el-pagination>
         </div>
         <div class="no-result" v-if="total <= 0">
-          <img :src="noDowanload"/>
+          <img :src="noDownload"/>
           <p>暂无下载，快去下载一些诗词吧~</p>
         </div>
       </section>
@@ -35,14 +35,14 @@
 
 <script>
 import header from '../components/header'
-import noDowanload from '../assets/img/noDowanload.png'
+import noDownload from '../assets/img/noDownload.png'
 export default {
   components:{
     Myheader: header,
   },
   data(){
     return{
-      noDowanload: noDowanload, 
+      noDownload: noDownload, 
       total:0,
       realTotal: 0,
       downloadList:[],

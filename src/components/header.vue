@@ -86,7 +86,6 @@
 <script>
 import downloadImg from '../assets/img/download.png'
 import defaultUserImg from '../assets/img/avatar.png'
-import bg2 from '../assets/img/bg2.png'
 import avatarUpload from '../assets/img/avatarUpload.png'
 export default {
   props: {

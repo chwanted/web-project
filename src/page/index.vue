@@ -46,7 +46,6 @@
 
 <script>
 import header from '../components/header'
-import authorAvatar from '../assets/img/libai.jpg'
 import hoverImg from '../assets/img/hover.png'
 import RankingList from '../components/rankingList.vue'
 export default {
@@ -57,10 +56,12 @@ export default {
   data() {
     return{
       searchContent: '',
-      authorAvatar: authorAvatar,
       hoverImg: hoverImg,
       authorList: [],
       rankingList: [],
+      query:{
+        
+      }
     }
   },
   created(){
@@ -69,6 +70,7 @@ export default {
   },
   methods: {
     toSearch(){
+
     },
     // 获取随机诗人
     getRandomPoet(){
