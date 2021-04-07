@@ -1,7 +1,7 @@
 <template>
     <div>
         <ul class="poetryList">
-            <li v-for="item in poetryList" :key="item.id" @click="toDetail(item)">
+            <li v-for="(item,index) in poetryList" :key="index" @click="toDetail(item)">
                 <div class="poetry">
                     <div class="poetry-top flex">
                         <h3>{{ item.name }}
@@ -12,6 +12,7 @@
                     <div class="poetry-info" v-html="item.content"></div>
                 </div>
             </li>
+            <slot></slot>
         </ul>
     </div>
 </template>
@@ -27,8 +28,9 @@ export default {
     methods:{
         // 跳转详情页
         toDetail(item){
-            let {poetryId,poetId} =item
-            this.$utils.toPage(`/detail?poetryId=${poetryId}&poetId=${poetId}`)
+            let {id,poetId} =item
+            console.log(id,poetId)
+            this.$utils.toPage(`/detail?poetryId=${id}&poetId=${poetId}`)
         }
     }
 }
