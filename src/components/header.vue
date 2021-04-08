@@ -103,7 +103,6 @@ export default {
       avatarUpload: avatarUpload,
       defaultUserImg: defaultUserImg,
       headerImage:'',
-      // isFixed: true,
       loginText: '登录',
       registerText: '注册',
       dialogVisible: false,
@@ -183,6 +182,8 @@ export default {
               localStorage.setItem('access_token', res.data.token)
               this.username = localStorage.getItem('username')
               this.headerIcon = localStorage.getItem('userImg')
+              this.$store.commit('setLoginStatus', true)
+              // location.reload()
             } else {
               this.$message.error(res.msg)
             }
@@ -218,7 +219,7 @@ export default {
           localStorage.removeItem('userId')
           localStorage.removeItem('userImg')
           localStorage.removeItem('access_token')
-
+          this.$store.commit('setLoginStatus', false)
           if(this.$route.path != "/index")
           {
             this.$router.push({
@@ -316,7 +317,7 @@ export default {
       height: 70px;
       display: flex;
       align-items: center;
-      width: 1200px;
+      width: 1400px;
       margin: 0 auto;
       .title {
         font-size: 26px;

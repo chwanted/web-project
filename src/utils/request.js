@@ -18,7 +18,6 @@ axios.defaults.withCredentials = false;
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_URL, // api 的 base_url
-  // withCredentials: true,
   timeout: 300000 // 请求超时时间
 })
 
@@ -71,35 +70,28 @@ service.interceptors.response.use(
           store.commit('user/setLoginStatus', false)
         }
         if (errorMsg !== undefined) {
-        //  Message.error(errorMsg || '系统忙，请稍后重试')
         }
       }
     } catch (e) {
       if (error.toString().indexOf('Error: timeout') !== -1) {
-        // Message.error('系统忙，请稍后重试')
         return Promise.reject(error)
       }
       if (error.toString().indexOf('Error: Network Error') !== -1) {
-      //  Message.error('系统忙，请稍后重试')
         return Promise.reject(error)
       }
     }
     if (code === 401) {
       store.commit('user/setLoginStatus', false)
-    //  console.log(777)
     } else if (code === 403) {
       router.push({ path: '/401' })
     } else if (code === 404) {
-      // Message.error('系统忙，请稍后重试')
     } else {
-      // console.log(code)
       const errorMsg = error.response.data.msg
       if (error.response.status === 401) {
         store.commit('user/setLoginStatus', false)
       }
 
       if (errorMsg !== undefined) {
-        // Message.error(errorMsg || '系统忙，请稍后重试')
       }
     }
     return Promise.reject(error)

@@ -1,17 +1,25 @@
 <template>
   <div>
-    <Myheader :isColor="false"></Myheader>
+    <Myheader :isFixed="true"></Myheader>
     <div class="wrap">
       <header>
         <div class="inner">
           <div class="search-box">
+            <div class="search-select-content">
+              <el-col :span="4">
+                <el-select v-model="searchSelect" placeholder="请选择" @change="searchChange">
+                  <el-option label="作者" :value="0"></el-option>
+                  <el-option label="诗词名称" :value="1"></el-option>
+                </el-select>
+              </el-col>
+            </div>
             <div class="search-input-content">
               <el-input v-model="searchContent"
               maxlength="200"
-              placeholder="请输入作者、诗词名称"
+              :placeholder="selectPlaceholder"
               @keyup.enter.native="toSearch()">
               </el-input>
-              <p @click="$utils.toPage('/searchDetail')" style="display: flex;align-items: center;justify-content: center;">查一下</p>
+              <p @click="toSearch" style="display: flex;align-items: center;justify-content: center;">查一下</p>
             </div>
           </div>
         </div>
@@ -55,22 +63,43 @@ export default {
   },
   data() {
     return{
+      searchSelect: 0,
       searchContent: '',
+      selectPlaceholder:'请输入作者名称',
       hoverImg: hoverImg,
       authorList: [],
       rankingList: [],
-      query:{
-        
-      }
+      query:{}
     }
   },
   created(){
     this.authorList = this.getRandomPoet()
     this.rankingList = this.getRankingList()
   },
+  watch:{
+    searchSelect(val,oldVal){
+      if(val == 0) this.selectPlaceholder = '请输入作者名称'
+      if(val == 1) this.selectPlaceholder = '请输入诗词名称'
+    }
+  },
   methods: {
+    searchChange(val){
+      this.searchContent = ''
+    },
     toSearch(){
-
+      var searchContent = this.searchContent
+      if(this.searchSelect == 0){
+        this.query.poet = searchContent
+        this.query.name = ''
+        this.query.type = ''
+      }else if(this.searchSelect == 1){
+        this.query.poet = ''
+        this.query.name = searchContent
+        this.query.type = ''
+      }
+      localStorage.setItem('searchQueryPoet', this.query.poet)
+      localStorage.setItem('searchQueryName', this.query.name)
+      this.$router.push('/searchDetail')
     },
     // 获取随机诗人
     getRandomPoet(){
@@ -96,6 +125,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.search-select-content /deep/.el-input__inner{
+  border: none;
+  font-size: 18px;
+  text-align: center;
+  margin-top: 10px;
+}
+.search-select-content /deep/.el-input__icon{
+  margin-top: 5px
+}
+
 .search-input-content /deep/.el-input__inner {
   height: 58px;
   line-height: 58px;

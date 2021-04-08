@@ -103,11 +103,11 @@ export default {
     //分页
     handleSizeChange(e){
       this.poetId.page = e
-      this.getDownloadList()
+      this.getPoetInfo()
     },
     handleCurrentChange(e){
       this.poetId.page = e
-      this.getDownloadList()
+      this.getPoetInfo()
     },
   }
 }

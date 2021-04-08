@@ -98,7 +98,7 @@ export default {
       letter-spacing: 2px;
       margin-bottom: 20px;
       color: #66b1ff;
-      margin: 0 auto;
+      margin: 0 auto 20px auto;
       width: 1000px;
     }
     
@@ -106,9 +106,8 @@ export default {
       margin: 0 auto;
       width: 1000px;
       list-style: none;
-
+      
       li{
-        margin-top: 20px;
         background: #fff;
         box-shadow: 0px 3px 6px 0px rgba(0,0,0,0.10);
         padding: 30px;

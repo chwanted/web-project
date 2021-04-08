@@ -8,23 +8,21 @@
         <div class="search-box">
           <el-form :inline="true" :model="query">
             <el-form-item>
-              <div class="poet">作者</div>
+              <span class="poet">作者</span>
               <el-input v-model="query.poet" 
                 placeholder="请输入作者姓名"
-                @input="e => query.poet = validForbid(e,100)"
                 maxlength="100">
               </el-input>
             </el-form-item>
             <el-form-item>
-              <div class="poetry">诗词名称</div>
+              <span class="poetry">诗词名称</span>
               <el-input v-model="query.name" 
                 placeholder="请输入诗词名称"
-                @input="e => query.name = validForbid(e,100)"
                 maxlength="100">
               </el-input>
             </el-form-item>
             <el-form-item>
-              <div class="type">类型</div>
+              <span class="type">类型</span>
               <el-select v-model="query.type" placeholder="请选择">
                 <el-option label="唐诗" value="唐诗"></el-option>
                 <el-option label="宋词" value="宋词"></el-option>
@@ -32,13 +30,11 @@
                 <el-option label="现代" value="现代"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item style="width: 100px; height: 36px; display: block;" class="search-button">
-              <el-button type="primary" style="width: 100px; height: 36px;" @click='toSearch'>搜索</el-button>
-            </el-form-item>
           </el-form>
+          <el-button type="primary" style="width: 100px; height: 36px;" @click='toSearch' class="search-button">搜索</el-button>
         </div>
         <div class="result">
-          <p class="total">为您找到相关诗词<span>{{total}}</span>篇</p>
+          <p v-if="total != 0" class="total">为您找到相关诗词<span>{{total}}</span>篇</p>
         </div>
         <PoetryList :poetryList='poetryList' v-if="poetryList.length > 0"></PoetryList>
         <div class="pagination" v-if="poetryList.length > 0">
@@ -53,10 +49,6 @@
             <span class="page-total">共<span>{{ total }}</span>条</span>
           </el-pagination>
         </div>
-        <div class="no-result" v-if="poetryList.length <= 0">
-          <img :src="noResult" class="noResult">
-          <p>暂无搜索结果，修改一下搜索条件吧~</p>
-        </div>
       </div>
     </div>
   </div>
@@ -66,7 +58,6 @@
 import header from '../components/header.vue'
 import bg from '../assets/img/bg.png'
 import poetryList from '../components/poetryList.vue'
-import noResult from '../assets/img/noResult.png'
 export default {
   components: { 
     Myheader: header,
@@ -74,7 +65,6 @@ export default {
   },
   data(){
     return{
-      noResult: noResult,
       bg: bg,
       poetryList:[],
       total:0,
@@ -85,6 +75,13 @@ export default {
         page:1,
         limit:10,
       }
+    }
+  },
+  created(){
+    this.query.poet = localStorage.getItem('searchQueryPoet') ? localStorage.getItem('searchQueryPoet') : ''
+    this.query.name = localStorage.getItem('searchQueryName') ? localStorage.getItem('searchQueryName') : ''
+    if (this.query.poet != ''|this.query.name != ''){
+      this.toSearch()
     }
   },
   methods:{
@@ -100,7 +97,10 @@ export default {
     toSearch(){
       this.$api.search.searchData(this.query).then(res => {
         this.poetryList = res.data.records
-        console.log(this.poetryList)
+        this.total = res.data.total
+        if (this.total == 0) {
+          this.$message({message: '暂无搜索结果！', type: 'info'})
+        }
       })
     },
   }
@@ -108,14 +108,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/deep/ .el-form--inline{
+  margin: 0px auto;
+}
 /deep/ .el-form{
-  margin: 17px 37px;
+  margin: 17px 100px;
 }
 /deep/ .el-form-item{
   width: calc(50% - 10px);
 }
 /deep/ .el-form-item__content{
-  width: 450px;
+  width: 1000px;
   display: flex;
   justify-content: flex-start;
 }
@@ -124,16 +127,23 @@ export default {
   border-bottom: 1px solid #dcdee4;
   border-radius: 0;
   font-size: 16px;
+  width: 600px;
 }
-/deep/ .el-pagination{
+/deep/.el-pagination{
   margin: 0 auto;
-  width: 1200px;
+  width: 1000px;
   padding: 25px 0;
   margin-right: 43px;
+  text-align: center;
+}
+/deep/ .el-button{
+  width: 100px!important;
+  height: 36px;
+  border-radius: 6px;
+  float: right;
 }
 .wrap{
-  background-color: #f4f7fc !important;
-
+  height: auto;
   .banner{
     width: 100%;
     height: 320px;
@@ -142,27 +152,43 @@ export default {
     background-size: 100% 100%;
   }
   .inner{
-    width: 1200px;
+    width: 1000px;
     margin: 0 auto;
 
+    .result{
+      font-size: 14px;
+      color:#999999;
+      margin: 20px 0;
+    }
     .search-box{
-      height: 340px;
+      height: 300px;
       background-color: #ffffff;
       box-shadow: 0px 2px 26px 0px rgba(28, 60, 154, 0.14);
       border-radius: 20px;
       margin-top: -163px;
       z-index: 2;
+      padding-top: 20px;
 
-      .poet,.type{
+      .search-button{
+        margin-right: 40px;
+      }
+
+      .poet{
         font-size: 18px;
         letter-spacing: 35px;
         color: #727377;
-        width: 106px;
+        width: 150px;
+      }
+      .type{
+        font-size: 18px;
+        letter-spacing: 35px;
+        color: #727377;
+        width: 130px;
       }
       .poetry{
         font-size: 18px;
         color: #727377;
-        width: 106px;
+        width: 150px;
       }
     }
 
@@ -179,14 +205,6 @@ export default {
           font-weight: normal;
           text-align: center;
         }
-      }
-    }
-
-    .no-result{
-      text-align: center;
-
-      .noResult{
-        width: 200px;
       }
     }
   }

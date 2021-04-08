@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Myheader :isfixed="false"></Myheader>
+    <Myheader :isFixed="true"></Myheader>
     <div class="wrap">
       <section>
         <div class="inner content-center">
@@ -19,7 +19,7 @@
             <div class="comment-list">
               <div class="comment-commit flex">
                 <div class="commentator flex-column">
-                  <img v-if="userAvatar=='null'" class="avatar" :src="defaultUserImg"/>
+                  <img v-if="userAvatar=='null'" class="avatar" :src="avatar"/>
                   <img v-else-if="userAvatar" class="avatar" :src="userAvatar"/>
                   <span class="commentator-name">{{username}}</span>
                 </div>
@@ -42,14 +42,6 @@
                         v-model="comment.content"
                         maxlength="200"
                         show-word-limit
-                        v-if="hasLogin"
-                      ></el-input>
-                      <el-input
-                        type="textarea"
-                        placeholder="请输入评论信息"
-                        v-model="comment.content"
-                        v-else
-                        :disabled="true"
                       ></el-input>
                     </el-form-item>
                     <div class="btn">
@@ -106,7 +98,6 @@
 
 <script>
 import avatar from '../assets/img/avatar.png'
-import defaultUserImg from '../assets/img/avatar.png'
 import header from '../components/header'
 import RankingList from '../components/rankingList.vue'
 export default {
@@ -117,26 +108,25 @@ export default {
   data(){
     return{
       total:0,
-      hasLogin:localStorage.hasLogin,
+      hasLogin: false,
       realTotal: 0,
       avatar: avatar,
-      defaultUserImg:defaultUserImg,
-      userAvatar: localStorage.userImg,
+      userAvatar: localStorage.getItem('userImg'),
       authorAvatar: '',
-      username: localStorage.username,
+      username: localStorage.getItem('username'),
       poemInfo: {},
       poetInfo: {},
       msg:[],
       rankingList:[],
       comment:{
         poetryId:'',
-        userId: localStorage.userId,
+        userId: localStorage.getItem('userId'),
         content:''
       },
       commentForm: {
         id: '',
         page: 1,
-        limit:10,
+        limit: 5,
       },
       path:'',
       poetId:{
@@ -152,6 +142,7 @@ export default {
   },
   created(){
     this.rankingList = this.getRankingList()
+    this.hasLogin = this.$store.state.user.hasLogin
   },
   watch:{
     // 监听路由参数变化
@@ -162,7 +153,16 @@ export default {
         this.loadInfo()
       },
       deep: true,
-    }
+    },
+    //监听用户登录状态改变
+    '$store.state.user.hasLogin': { 
+        handler() {
+          this.hasLogin = localStorage.getItem('hasLogin')
+          this.username = localStorage.getItem('username')
+          this.comment.userId = localStorage.getItem('userId')
+          this.userAvatar = localStorage.getItem('userImg')
+        }
+      }
   },
   mounted(){
     this.commentForm.id = this.comment.poetryId = this.$route.query.poetryId
@@ -210,6 +210,24 @@ export default {
         this.rankingList = res.data.records
       })
     },
+    // 获取当前时间
+    getNowTime(){
+      let dateTime
+      let yy = new Date().getFullYear()
+      let mm = new Date().getMonth() + 1
+      let dd = new Date().getDate()
+      let hh = new Date().getHours()
+      let mf = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()
+      let ss = new Date().getSeconds() < 10 ? '0' + new Date().getSeconds() : new Date().getSeconds()
+      if (mm >= 1 && mm <= 9) {
+        mm = "0" + mm;
+      }
+      if (dd >= 0 && dd <= 9) {
+          dd = "0" + dd;
+      }
+      dateTime = yy + '-' + mm + '-' + dd + ' ' + hh + ':' + mf + ':' + ss
+      return dateTime
+    },
     // 添加评论
     addComments(){
       if(!this.hasLogin){
@@ -220,7 +238,7 @@ export default {
             this.$api.comment.addComment(this.comment).then(res => {
               if (res.msg === '操作成功') {
                 this.$message({message: '评论成功！', type: 'success'})
-                location.reload()
+                this.msg.unshift({userName:localStorage.username,headerImage:localStorage.userImg=='null'? avatar:localStorage.userImg,content:this.comment.content,createTime:this.getNowTime()})
               } else {
                 this.$message.error(res.msg)
               }
@@ -231,13 +249,16 @@ export default {
     },
     // 下载
     download(){
-      var token = localStorage.getItem("access_token")
-      console.log(token)
-      var tokenEn ;
-      if(token){
-        tokenEn = token.replace(/#/g,'liuchaojun');
+      if(!this.hasLogin){
+        this.$message.error('请先登录！')
+      }else{
+        var token = localStorage.getItem("access_token")
+        var tokenEn ;
+        if(token){
+          tokenEn = token.replace(/#/g,'liuchaojun');
+        }
+        window.location.href = process.env.BASE_URL+this.poemInfo.url+"&id="+ this.poemInfo.id + "&token="+tokenEn;
       }
-      window.location.href = process.env.BASE_URL+this.poemInfo.url+"&id="+ this.poemInfo.id + "&token="+tokenEn;
     },
     // 去作者详情页
     toAuthorDetail(){
