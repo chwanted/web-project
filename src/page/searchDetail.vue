@@ -112,15 +112,15 @@ export default {
   margin: 0px auto;
 }
 /deep/ .el-form{
-  margin: 17px 100px;
+  margin: 17px 100px 0px 100px;
 }
 /deep/ .el-form-item{
   width: calc(50% - 10px);
 }
 /deep/ .el-form-item__content{
-  width: 1000px;
-  display: flex;
-  justify-content: flex-start;
+  width: 800px !important;
+  display: flex !important;
+  justify-content: flex-start !important;
 }
 /deep/ .el-input__inner{
   border: none;
@@ -168,6 +168,7 @@ export default {
       margin-top: -163px;
       z-index: 2;
       padding-top: 20px;
+      
 
       .search-button{
         margin-right: 40px;
