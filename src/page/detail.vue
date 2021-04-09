@@ -239,6 +239,7 @@ export default {
               if (res.msg === '操作成功') {
                 this.$message({message: '评论成功！', type: 'success'})
                 this.msg.unshift({userName:localStorage.username,headerImage:localStorage.userImg=='null'? avatar:localStorage.userImg,content:this.comment.content,createTime:this.getNowTime()})
+                this.realTotal ++
               } else {
                 this.$message.error(res.msg)
               }
