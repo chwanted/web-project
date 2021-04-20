@@ -256,7 +256,7 @@ export default {
         var token = localStorage.getItem("access_token")
         var tokenEn ;
         if(token){
-          tokenEn = token.replace(/#/g,'liuchaojun');
+          tokenEn = token.replace(/#/g,'hh');
         }
         window.location.href = process.env.BASE_URL+this.poemInfo.url+"&id="+ this.poemInfo.id + "&token="+tokenEn;
       }
